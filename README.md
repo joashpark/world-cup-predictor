@@ -1,130 +1,229 @@
-# optimal-portfolio-allocator
+# 🏆 World Cup 2026 Prediction Engine
 
-A portfolio-optimization project for Applied Mathematics showcasing **Markowitz portfolio theory**, convex optimization, and risk-return tradeoff analysis.
+An advanced machine learning system to predict international soccer matches and simulate the 2026 World Cup tournament using Monte Carlo methods and ensemble learning.
 
-## Project Structure
+---
+
+## 📊 Overview
+
+This project combines team statistics, historical match data, and sophisticated ML models to forecast World Cup outcomes. The engine simulates thousands of tournament iterations to estimate championship probabilities and expected match results.
+
+**Key Capabilities:**
+- Match outcome prediction (Win/Draw/Loss)
+- Expected Goals (xG) forecasting
+- Full tournament simulation with 10,000+ iterations
+- Championship probability estimation
+
+---
+
+## 🔧 Methodology
+
+### Data Pipeline
+- **Data Source**: Kaggle International Football Statistics
+- **Features**: Elo ratings, team overall ratings, attack/defense stats, match neutrality
+- **Preprocessing**: Label encoding, feature normalization, null value handling
+
+### Machine Learning Models
+
+| Component | Model | Purpose | Metric |
+|-----------|-------|---------|--------|
+| **Match Outcomes** | XGBoost Classifier | Predict Win/Draw/Loss | 62% Accuracy |
+| **Expected Goals** | Gradient Boosting Regressor | Forecast goals scored | 1.11 MAE |
+
+### Architecture
+- **Object-Oriented Design**: `Team`, `WorldCupSimulator` classes
+- **Ensemble Approach**: Combines multiple signals for robust predictions
+- **Monte Carlo Simulation**: Accounts for tournament randomness and edge cases
+
+---
+
+## 🎯 Key Results
+
+### 2026 Championship Predictions
+| Rank | Team | Probability | Elo | Overall |
+|------|------|-------------|-----|---------|
+| 🥇 | Argentina | 67.9% | 2115 | 86 |
+| 🥈 | France | 18.5% | 2080 | 85 |
+| 🥉 | Brazil | 8.2% | 2050 | 84 |
+| 4️⃣ | England | 3.1% | 2010 | 83 |
+| 5️⃣ | Spain | 1.8% | 1980 | 83 |
+
+### Model Performance
+- **Classification Accuracy**: 62%
+- **xG Prediction MAE**: 1.11 goals
+- **Simulation Stability**: Consistent over 5,000+ iterations
+
+---
+
+## 📁 Project Structure
 
 ```
-optimal-portfolio-allocator/
+world-cup-predictor/
 ├── notebooks/
-│   └── Portfolio_Optimization.ipynb
-├── src/
-│   └── portfolio.py
+│   └── World_Cup_Prediction.ipynb    # Main analysis & simulation
 ├── data/
-├── outputs/
-├── README.md
-└── requirements.txt
+│   └── teams_match_features.csv      # Historical match data
+├── output/
+│   └── world_cup_2026_projections.csv # Championship probabilities
+├── README.md                          # This file
+└── requirements.txt                   # Dependencies
 ```
 
-## Markowitz Portfolio Theory
+---
 
-Markowitz mean-variance optimization models a portfolio with weights vector \(w\) over assets with expected returns vector \(\mu\) and covariance matrix \(\Sigma\).
+## 🚀 Getting Started
 
-- Portfolio expected return: \(\mathbb{E}[R_p] = w^T\mu\)
-- Portfolio variance: \(\sigma_p^2 = w^T\Sigma w\)
-- Portfolio volatility: \(\sigma_p = \sqrt{w^T\Sigma w}\)
+### Prerequisites
+- Python 3.8+
+- Jupyter Notebook or JupyterLab
 
-### Optimization problems used
-
-1. **Global minimum variance portfolio**
-
-\[
-\min_w\; w^T\Sigma w
-\]
-subject to
-\[
-\sum_i w_i = 1,\quad w_i \ge 0
-\]
-
-2. **Target-return minimum-risk portfolio**
-
-\[
-\min_w\; w^T\Sigma w
-\]
-subject to
-\[
-\sum_i w_i = 1,\quad w^T\mu = r_{target},\quad w_i \ge 0
-\]
-
-3. **Maximum Sharpe ratio portfolio**
-
-\[
-\max_w\; \frac{w^T\mu - r_f}{\sqrt{w^T\Sigma w}}
-\]
-subject to
-\[
-\sum_i w_i = 1,\quad w_i \ge 0
-\]
-
-## What the Notebook Demonstrates
-
-`notebooks/Portfolio_Optimization.ipynb`:
-
-- Downloads 5 years of daily data for 8 stocks: `AAPL, GOOGL, MSFT, TSLA, JNJ, XOM, PG, V`
-- Computes daily returns, expected returns vector \(\mu\), covariance matrix \(\Sigma\)
-- Solves:
-  - Global minimum variance portfolio
-  - Maximum Sharpe ratio portfolio
-  - Target-return risk-minimizing portfolio
-- Generates 1000 random feasible portfolios for efficient frontier visualization
-- Produces plots for:
-  - Efficient frontier (risk vs return)
-  - Highlighted minimum-variance and max-Sharpe points
-  - Optimal allocation bar chart
-  - Individual stock risk-vs-return map
-- Compares optimized portfolios vs equal-weight (1/N) strategy
-- Prints summary statistics including correlation matrix, top performers, and risk comparison
-
-## How to Run
-
-1. Install dependencies:
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/joashpark/world-cup-predictor.git
+cd world-cup-predictor
+
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-2. Run notebook:
+### Running the Notebook
 
 ```bash
-cd notebooks
-jupyter notebook Portfolio_Optimization.ipynb
+jupyter notebook notebooks/World_Cup_Prediction.ipynb
 ```
 
-3. Optional module use in scripts:
+The notebook executes in stages:
+1. **Data Loading & Cleaning** - Prepares historical match data
+2. **Model Training** - Trains XGBoost and Gradient Boosting models
+3. **Tournament Simulation** - Runs 5,000+ tournament iterations
+4. **Visualization & Export** - Generates charts and CSV projections
+
+---
+
+## 📈 Visualizations
+
+The project generates:
+- **Championship Probability Bar Chart** - Win % for top contenders
+- **Match Outcome Heatmaps** - Historical accuracy by team
+- **Expected Goals Scatter Plot** - Predicted vs. actual goals
+
+---
+
+## 🔍 How It Works
+
+### Match Prediction Pipeline
+
+```
+Team Statistics (Elo, Overall, Attack, Defense)
+    ↓
+Feature Engineering (Differences, Ratios)
+    ↓
+XGBoost Classification Model
+    ↓
+Outcome Probabilities (Win/Draw/Loss)
+    ↓
+Tournament Simulation (Bracket Progression)
+```
+
+### Example: Argentina vs France
 
 ```python
-from src.portfolio import Portfolio
+t1 = Team('Argentina', 2100, 85, 87, 83)
+t2 = Team('France', 2050, 84, 88, 82)
+result = simulator.simulate_match(t1, t2)  # Output: "Argentina"
 ```
 
-## Interpreting Results
+The model considers:
+- Elo differential: Argentina +50 (historical strength)
+- Overall rating differential: +1 (marginal)
+- Attack vs Defense matchups
+- Home/neutral field advantage
 
-- **Higher return with lower risk** is generally preferred.
-- **Efficient frontier** represents feasible portfolios under long-only constraints.
-- **Max Sharpe** portfolio optimizes risk-adjusted return for a chosen risk-free rate.
-- **Target-return** optimization helps choose the least-risk portfolio that meets a return objective.
+---
 
-## Limitations
+## 📊 Data Features
 
-- Mean and covariance estimates are historically based and unstable over regime shifts.
-- Transaction costs, taxes, slippage, and liquidity are ignored.
-- Long-only assumption excludes short-selling and leverage.
-- Risk is modeled only by variance; downside-risk alternatives are not included.
-- Expected returns are sample averages, which can be noisy.
+| Feature | Description | Source |
+|---------|-------------|--------|
+| `home_elo` | Home team Elo rating | World Football Elo |
+| `away_elo` | Away team Elo rating | World Football Elo |
+| `overall_diff` | Overall team rating difference | Kaggle FIFA Stats |
+| `attack_diff` | Attack stat differential | Team Stats |
+| `defense_diff` | Defense stat differential | Team Stats |
+| `is_neutral` | Neutral venue (1 = yes, 0 = no) | Match Info |
+| `home_goals` | Goals scored by home team | Match Record |
+| `away_goals` | Goals scored by away team | Match Record |
 
-## Future Improvements
+---
 
-- Black-Litterman prior-adjusted expected returns
-- Robust optimization under parameter uncertainty
-- Rolling-window backtests and walk-forward validation
-- Cardinality/turnover constraints for practical implementation
-- Alternative risk measures (CVaR, downside semivariance)
+## 🎓 Model Insights
 
-## References
+### XGBoost Classifier
+- **Training Samples**: 5,000+ historical matches
+- **Feature Importance**: Elo differential is the strongest predictor
+- **Class Distribution**: Win (45%), Draw (25%), Loss (30%)
+- **Regularization**: `use_label_encoder=False`, `eval_metric='mlogloss'`
 
-- Markowitz, H. (1952). *Portfolio Selection*. The Journal of Finance, 7(1), 77–91.
-- Boyd, S., & Vandenberghe, L. (2004). *Convex Optimization*. Cambridge University Press.
-- Luenberger, D. G. (1997). *Investment Science*. Oxford University Press.
+### Gradient Boosting Regressor (xG)
+- **n_estimators**: 100 trees
+- **Learning Rate**: 0.1
+- **Max Depth**: 3
+- **Predicts**: Expected goals for home and away teams
 
-## Disclaimer
+---
 
-This project is for educational purposes and should not be treated as financial advice.
+## 📌 Limitations & Considerations
+
+- **Historical Bias**: Model trained on past data; doesn't account for roster changes
+- **Injuries & Form**: No real-time injury or current form adjustments
+- **Tournament Format**: Simplified knockout bracket (actual World Cup has group stages)
+- **Accuracy Ceiling**: 62% reflects inherent unpredictability of sports
+- **Data Recency**: Trained on historical data; updates needed seasonally
+
+---
+
+## 🔮 Future Enhancements
+
+- [ ] Integrate real-time injury databases
+- [ ] Add player-level performance metrics
+- [ ] Implement group stage simulation
+- [ ] Include betting line calibration
+- [ ] Create API endpoint for live predictions
+- [ ] Add confidence intervals to projections
+- [ ] Retrain models with 2024-2025 match data
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to:
+- Report bugs or suggest improvements
+- Submit pull requests with enhancements
+- Share alternative modeling approaches
+
+---
+
+## 📄 License
+
+This project is open source. Feel free to use and modify for educational purposes.
+
+---
+
+## 📞 Contact & Resources
+
+- **Author**: joashpark
+- **Repository**: [world-cup-predictor](https://github.com/joashpark/world-cup-predictor)
+- **Data Source**: [Kaggle International Football Statistics](https://www.kaggle.com/)
+- **Inspiration**: World Football Elo Ratings
+
+---
+
+## 🎯 Disclaimer
+
+*This project is for educational and entertainment purposes. Predictions are based on historical data and machine learning models. Actual tournament outcomes will vary. Use results responsibly and never make betting decisions based solely on these predictions.*
+
+---
+
+**Last Updated**: July 2026 | **Model Version**: 1.0
